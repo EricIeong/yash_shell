@@ -28,7 +28,7 @@ A feature-rich Unix shell implementation in C from scratch, supporting command e
 
 ```bash
 # Clone the repository
-git clone https://github.com/EricIeong/yash-shell.git
+git clone https://github.com/EricIeong/yash_shell.git
 cd yash-shell
 
 # Compile
