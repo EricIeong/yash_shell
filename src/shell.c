@@ -1,11 +1,3 @@
-/*
- * Student: [Ieong Cheok Him]
- * ID: [3036273512]
- * Platform: [Docker]
- * 
- * Progress: I should have finished everything I think...
- * Gen AI usage: https://chat.deepseek.com/share/sztkbx9qpvr3mvmbbh
- */
 #include <sys/resource.h>
 #include <time.h>
 #include <stdio.h>
