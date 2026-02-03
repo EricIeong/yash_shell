@@ -47,7 +47,7 @@ int main() {
     char *input;  //string to store input
     char **args;  //string array to store parsed input
     int should_run = 1;
-    int is_background = 0;
+    //int is_background = 0;
     
     // Set up signal handler for SIGINT
     signal(SIGINT, handle_sigint);
@@ -136,9 +136,23 @@ char *read_input() {
         perror("malloc failed");
         return NULL;
     }
-    
+
+    //clearinterrupts
+    sigint_received = 0;
+
     // Use fgets to read from stdin into the allocated memory
     if (fgets(input, MAX_INPUT, stdin) == NULL) {
+        // Check if it was interrupted by signal
+        if (feof(stdin)) {
+            // EOF (Ctrl+D)
+            free(input);
+            return NULL;
+        } else if (ferror(stdin) && errno == EINTR) {
+            // Interrupted by signal
+            clearerr(stdin);
+            free(input);
+            return NULL;
+        }
         // Handle EOF (Ctrl+D) or error
         free(input);
         return NULL;
@@ -283,10 +297,13 @@ int execute_piped_commands(char ***commands, int num_commands) {
     return exit_status;
 }
 
+// Signal handler for SIGINT (Ctrl+C), ignored as per requirements
+//note that it can still terminate child processes
 void handle_sigint(int sig) {
+    (void)sig; // Unused parameter, avoid compiler warning
     sigint_received = 1;
     printf("\n"); //next line
-    display_prompt(); //ignore the SIGINT and display prompt again
+    display_prompt();
 }
 
 int is_builtin_command(char **args) { //return 1 if the first argument is 'watch' or 'exit'
